@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const app = express();
 require('dotenv').config();
@@ -9,18 +10,16 @@ const fs = require('fs');
 const port = process.env.PORT || 3001;
 
 // Ensure uploads folder exists
-if (!fs.existsSync('uploads')) {
-  fs.mkdirSync('uploads');
-}
+if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
-// Multer setup
+// Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 1024 * 1024 * 10 } // 10MB
+  limits: { fileSize: 1024 * 1024 * 10 } // 10MB max
 });
 
 // Express setup
@@ -41,11 +40,9 @@ async function startServer() {
     const db = client.db('MovieDataBase');
     bookingCollection = db.collection('bookings');
 
-    // Start server only after MongoDB is connected
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
     });
-
   } catch (err) {
     console.error('MongoDB connection failed:', err);
     process.exit(1);
@@ -57,7 +54,7 @@ startServer();
 // Routes
 app.get('/', (req, res) => res.redirect('/home'));
 
-// Home page
+// Home page - show all movies
 app.get('/home', async (req, res) => {
   try {
     const movie = await bookingCollection.find().toArray();
@@ -134,7 +131,7 @@ app.post('/book/:id', async (req, res) => {
   }
 });
 
-// Booking history
+// Booking history page
 app.get('/booking-history', async (req, res) => {
   try {
     const bookings = await bookingCollection.find({ "seats.booked": true }).toArray();
@@ -153,6 +150,7 @@ app.get('/booking-history', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 app.listen(port,()=>{
   console.log(`server is running at http://localhost:${port}`);
