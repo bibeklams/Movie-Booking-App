@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Movie - CineBook</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #0f0f1a;
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header Styles */
+    header {
+      background-color: #1a1a2e;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e50914;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      background-color: #e50914;
+      color: #ffffff;
+    }
+    
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+    }
+    
+    .page-title h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .page-title p {
+      color: #b0b0b0;
+      font-size: 1.1rem;
+    }
+    
+    /* Form Styles */
+    .form-container {
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #2d2d4d;
+      border-radius: 6px;
+      background-color: #0f0f1a;
+      color: #ffffff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #e50914;
+      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .file-input-container {
+      position: relative;
+    }
+    
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px dashed #2d2d4d;
+      border-radius: 6px;
+      background-color: #0f0f1a;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-input-label:hover {
+      border-color: #e50914;
+      background-color: rgba(229, 9, 20, 0.05);
+    }
+    
+    .file-input-label i {
+      color: #e50914;
+    }
+    
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #b0b0b0;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+    }
+    
+    .submit-btn {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      background-color: #ff6b6b;
+    }
+    
+    .back-link {
+      color: #b0b0b0;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: #ffffff;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background-color: #0a0a14;
+      padding: 3rem 2rem 1.5rem;
+      margin-top: 4rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      color: #e50914;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer-section p, .footer-section a {
+      color: #b0b0b0;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+      color: #ffffff;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #1a1a2e;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: #e50914;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid #1a1a2e;
+      text-align: center;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 1.5rem;
+      }
+      
+      .page-title h1 {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      main {
+        padding: 0 1rem;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">CineBook</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">Bookings</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <section class="page-title">
+      <h1>Register Your Movie</h1>
+      <p>Add a new movie to our collection and make it available for booking</p>
+    </section>
+    
+    <div class="form-container">
+      <form action="/add-movie" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="title">Movie Title</label>
+          <input type="text" name="title" id="title" placeholder="Enter movie title" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="picture">Movie Poster</label>
+          <div class="file-input-container">
+            <label class="file-input-label" for="picture">
+              <i>📁</i> Choose a file...
+            </label>
+            <input type="file" name="picture" id="picture" class="file-input" accept="image/*" required>
+          </div>
+          <div class="file-name" id="file-name">No file selected</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea name="description" id="description" placeholder="Enter movie description" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="price">Ticket Price ($)</label>
+          <input type="number" name="price" id="price" min="0" step="0.01" placeholder="Enter ticket price" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="seats">Total Seats</label>
+          <input type="number" name="seats" id="seats" min="1" placeholder="Enter total available seats" required>
+        </div>
+        
+        <div class="form-actions">
+          <a href="/" class="back-link">← Back to Home</a>
+          <button type="submit" class="submit-btn">Add Movie</button>
+        </div>
+      </form>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About CineBook</h3>
+        <p>Your go-to platform for booking movie tickets online. We bring the cinema experience to your fingertips with the latest releases and exclusive deals.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">My Bookings</a>
+        <a href="#">Contact Us</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>Email: support@cinebook.com</p>
+        <p>Phone: 984733000</p>
+        <p>Address: 123 Cinema Street, Movie City</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 CineBook. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // File input display functionality
+    document.getElementById('picture').addEventListener('change', function(e) {
+      const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+      document.getElementById('file-name').textContent = fileName;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking History - CineBook</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #0f0f1a;
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header Styles */
+    header {
+      background-color: #1a1a2e;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e50914;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      background-color: #e50914;
+      color: #ffffff;
+    }
+    
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+    }
+    
+    .page-title h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .page-title p {
+      color: #b0b0b0;
+      font-size: 1.1rem;
+    }
+    
+    /* Booking History Styles */
+    .bookings-container {
+      margin-bottom: 2rem;
+    }
+    
+    .bookings-list {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .booking-card {
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .booking-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .booking-content {
+      display: flex;
+      padding: 1.5rem;
+    }
+    
+    .booking-poster {
+      flex: 0 0 150px;
+      margin-right: 1.5rem;
+    }
+    
+    .booking-poster img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .booking-details {
+      flex: 1;
+    }
+    
+    .booking-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    
+    .booking-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .info-label {
+      font-size: 0.9rem;
+      color: #b0b0b0;
+      margin-bottom: 0.3rem;
+    }
+    
+    .info-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .seats-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .seat-badge {
+      background-color: #e50914;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .total-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e50914;
+      text-align: right;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #2d2d4d;
+    }
+    
+    /* No Bookings State */
+    .no-bookings {
+      text-align: center;
+      padding: 3rem;
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+    
+    .no-bookings-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #e50914;
+    }
+    
+    .no-bookings h2 {
+      color: #ffffff;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .no-bookings p {
+      color: #b0b0b0;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .explore-movies-btn {
+      display: inline-block;
+      background-color: #e50914;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    
+    .explore-movies-btn:hover {
+      background-color: #ff6b6b;
+    }
+    
+    /* Back Link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #b0b0b0;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: #ffffff;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background-color: #0a0a14;
+      padding: 3rem 2rem 1.5rem;
+      margin-top: 4rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      color: #e50914;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer-section p, .footer-section a {
+      color: #b0b0b0;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+      color: #ffffff;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #1a1a2e;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: #e50914;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid #1a1a2e;
+      text-align: center;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .booking-content {
+        flex-direction: column;
+      }
+      
+      .booking-poster {
+        flex: 0 0 auto;
+        margin-right: 0;
+        margin-bottom: 1rem;
+        max-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .booking-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-title h1 {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      main {
+        padding: 0 1rem;
+      }
+      
+      .booking-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">CineBook</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking" class="active">Bookings</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <section class="page-title">
+      <h1>Your Booking History</h1>
+      <p>View all your past and upcoming movie bookings</p>
+    </section>
+    
+    <div class="bookings-container">
+      <% if (bookings.length > 0) { %>
+        <div class="bookings-list">
+          <% bookings.forEach(booking => { %>
+            <div class="booking-card">
+              <div class="booking-content">
+                <div class="booking-poster">
+                  <% if (booking.picture) { %>
+                    <img src="/uploads/<%= booking.picture %>" alt="<%= booking.title %> poster">
+                  <% } %>
+                </div>
+                
+                <div class="booking-details">
+                  <h2 class="booking-title"><%= booking.title %></h2>
+                  
+                  <div class="booking-info">
+                    <div class="info-item">
+                      <span class="info-label">Price per Seat</span>
+                      <span class="info-value">$<%= booking.price %></span>
+                    </div>
+                    
+                    <div class="info-item">
+                      <span class="info-label">Number of Seats</span>
+                      <span class="info-value"><%= booking.seats.length %></span>
+                    </div>
+                    
+                    <div class="info-item">
+                      <span class="info-label">Seats Booked</span>
+                      <div class="seats-container">
+                        <% booking.seats.forEach(seat => { %>
+                          <span class="seat-badge"><%= seat %></span>
+                        <% }) %>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="total-price">
+                    Total: $<%= booking.seats.length * booking.price %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        
+        <a href="/" class="back-link">← Back to Home</a>
+      <% } else { %>
+        <div class="no-bookings">
+          <div class="no-bookings-icon">🎬</div>
+          <h2>No Bookings Yet</h2>
+          <p>You haven't made any bookings yet. Explore our movie collection and book your first show!</p>
+          <a href="/" class="explore-movies-btn">Explore Movies</a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About CineBook</h3>
+        <p>Your go-to platform for booking movie tickets online. We bring the cinema experience to your fingertips with the latest releases and exclusive deals.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">My Bookings</a>
+        <a href="#">Contact Us</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>Email: support@cinebook.com</p>
+        <p>Phone: 984733000</p>
+        <p>Address: 123 Cinema Street, Movie City</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2024 CineBook. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

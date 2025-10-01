@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Show - CineBook</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #0f0f1a;
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header Styles */
+    header {
+      background-color: #1a1a2e;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e50914;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      background-color: #e50914;
+      color: #ffffff;
+    }
+    
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem 0;
+    }
+    
+    .page-title h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .page-title p {
+      color: #b0b0b0;
+      font-size: 1.1rem;
+    }
+    
+    /* Movie Info Section */
+    .movie-info-container {
+      display: flex;
+      gap: 2rem;
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .movie-poster {
+      flex: 0 0 250px;
+    }
+    
+    .movie-poster img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .movie-details {
+      flex: 1;
+    }
+    
+    .movie-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    
+    .movie-description {
+      color: #b0b0b0;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .movie-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e50914;
+    }
+    
+    /* Screen and Seats Section */
+    .booking-section {
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .screen-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .screen {
+      display: inline-block;
+      width: 80%;
+      height: 30px;
+      background: linear-gradient(to bottom, #e50914, #ff6b6b);
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(229, 9, 20, 0.3);
+      color: white;
+      font-weight: bold;
+      line-height: 30px;
+    }
+    
+    .seats-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .seats-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+    
+    .seat {
+      position: relative;
+    }
+    
+    .seat input {
+      display: none;
+    }
+    
+    .seat label {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: #2d2d4d;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .seat input:checked + label {
+      background-color: #e50914;
+      transform: scale(1.1);
+    }
+    
+    .seat input:disabled + label {
+      background-color: #4a4a6a;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    .seat-legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+    
+    .available {
+      background-color: #2d2d4d;
+    }
+    
+    .selected {
+      background-color: #e50914;
+    }
+    
+    .booked {
+      background-color: #4a4a6a;
+    }
+    
+    /* Booking Form */
+    .booking-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .selected-seats-info {
+      background-color: #0f0f1a;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .selected-seats-info h3 {
+      margin-bottom: 0.5rem;
+      color: #e50914;
+    }
+    
+    .total-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e50914;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .book-btn {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .book-btn:hover {
+      background-color: #ff6b6b;
+    }
+    
+    .back-link {
+      color: #b0b0b0;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: #ffffff;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background-color: #0a0a14;
+      padding: 3rem 2rem 1.5rem;
+      margin-top: 4rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      color: #e50914;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer-section p, .footer-section a {
+      color: #b0b0b0;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+      color: #ffffff;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #1a1a2e;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: #e50914;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid #1a1a2e;
+      text-align: center;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .movie-info-container {
+        flex-direction: column;
+      }
+      
+      .movie-poster {
+        flex: 0 0 auto;
+        max-width: 250px;
+        margin: 0 auto;
+      }
+      
+      .seats-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      
+      .page-title h1 {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      main {
+        padding: 0 1rem;
+      }
+      
+      .seats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">CineBook</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">Bookings</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <section class="page-title">
+      <h1>Book Your Show Now</h1>
+      <p>Select your seats and complete your booking</p>
+    </section>
+    
+    <div class="movie-info-container">
+      <div class="movie-poster">
+        <% if(movie.picture) { %>
+          <img src="/uploads/<%= movie.picture %>" alt="<%= movie.title %>">
+        <% } %>
+      </div>
+      <div class="movie-details">
+        <h2 class="movie-title"><%= movie.title %></h2>
+        <p class="movie-description"><%= movie.description %></p>
+        <div class="movie-price">$<%= movie.price %> per ticket</div>
+      </div>
+    </div>
+    
+    <div class="booking-section">
+      <div class="screen-container">
+        <div class="screen">SCREEN</div>
+      </div>
+      
+      <div class="seats-container">
+        <div class="seat-legend">
+          <div class="legend-item">
+            <div class="legend-color available"></div>
+            <span>Available</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color selected"></div>
+            <span>Selected</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color booked"></div>
+            <span>Booked</span>
+          </div>
+        </div>
+        
+        <form action="/book/<%= movie._id %>" method="post" class="booking-form">
+          <h3>Select Your Seats:</h3>
+          
+          <div class="seats-grid">
+            <% movie.seats.forEach(seat => { %>
+              <div class="seat">
+                <input type="checkbox" name="selectedSeats" value="<%= seat.seatNo %>" id="seat-<%= seat.seatNo %>" <%= seat.booked ? 'disabled' : '' %>>
+                <label for="seat-<%= seat.seatNo %>"><%= seat.seatNo %></label>
+              </div>
+            <% }) %>
+          </div>
+          
+          <div class="selected-seats-info">
+            <h3>Selected Seats:</h3>
+            <div id="selected-seats-list">No seats selected</div>
+          </div>
+          
+          <div class="total-price">
+            Total: $<span id="total-price">0</span>
+          </div>
+          
+          <div class="form-actions">
+            <a href="/" class="back-link">← Back to Home</a>
+            <button type="submit" class="book-btn">Confirm Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About CineBook</h3>
+        <p>Your go-to platform for booking movie tickets online. We bring the cinema experience to your fingertips with the latest releases and exclusive deals.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">My Bookings</a>
+        <a href="#">Contact Us</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>Email: support@cinebook.com</p>
+        <p>Phone: +1 (555) 123-4567</p>
+        <p>Address: 123 Cinema Street, Movie City</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2023 CineBook. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Seat selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const seatCheckboxes = document.querySelectorAll('input[name="selectedSeats"]:not(:disabled)');
+      const selectedSeatsList = document.getElementById('selected-seats-list');
+      const totalPriceElement = document.getElementById('total-price');
+      const ticketPrice = <%= movie.price %>;
+      
+      // Update selected seats and total price
+      function updateSelection() {
+        const selectedSeats = Array.from(seatCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
+        
+        // Update selected seats list
+        if (selectedSeats.length > 0) {
+          selectedSeatsList.textContent = selectedSeats.join(', ');
+        } else {
+          selectedSeatsList.textContent = 'No seats selected';
+        }
+        
+        // Update total price
+        const totalPrice = selectedSeats.length * ticketPrice;
+        totalPriceElement.textContent = totalPrice.toFixed(2);
+      }
+      
+      // Add event listeners to all seat checkboxes
+      seatCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelection);
+      });
+      
+      // Initialize selection
+      updateSelection();
+    });
+  </script>
+</body>
+</html>

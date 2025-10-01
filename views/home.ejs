@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Movie Booking</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #0f0f1a;
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header Styles */
+    header {
+      background-color: #1a1a2e;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e50914;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      background-color: #e50914;
+      color: #ffffff;
+    }
+    
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+    
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #b0b0b0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .movies-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .movie-card {
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .movie-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .movie-poster {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .movie-info {
+      padding: 1.5rem;
+    }
+    
+    .movie-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+    
+    .movie-description {
+      color: #b0b0b0;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .movie-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e50914;
+      margin-bottom: 1rem;
+    }
+    
+    .book-btn {
+      display: inline-block;
+      background-color: #e50914;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .book-btn:hover {
+      background-color: #ff6b6b;
+    }
+    
+    .no-movies {
+      text-align: center;
+      padding: 3rem;
+      background-color: #1a1a2e;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+    
+    .no-movies h1 {
+      color: #b0b0b0;
+      font-size: 1.8rem;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background-color: #0a0a14;
+      padding: 3rem 2rem 1.5rem;
+      margin-top: 4rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      color: #e50914;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer-section p, .footer-section a {
+      color: #b0b0b0;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+      color: #ffffff;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #1a1a2e;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: #e50914;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid #1a1a2e;
+      text-align: center;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .movies-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+    
+    @media (max-width: 576px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      main {
+        padding: 0 1rem;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .movies-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="logo">CineBook</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking-history">Booking History</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <section class="hero">
+      <h1>Welcome to Mini Movie Booking</h1>
+      <p>Book your favorite movies in just a few clicks. Enjoy the latest blockbusters at amazing prices!</p>
+    </section>
+    
+    <%if(movie.length>=0){%>
+      <div class="movies-container">
+        <%movie.forEach(m=>{%>
+          <div class="movie-card">
+            <%if(m.picture){%>
+              <img src="uploads/<%=m.picture%>" class="movie-poster" alt="<%=m.title%>">
+              <div class="movie-info">
+                <h2 class="movie-title"><%=m.title%></h2>
+                <p class="movie-description"><%=m.description%></p>
+                <div class="movie-price">$<%=m.price%></div>
+                <a href="/book/<%=m._id%>" class="book-btn">Book Now</a>
+              </div>
+            <%}%>
+          </div>
+        <%})%>
+      </div>
+    <%}else{%>
+      <div class="no-movies">
+        <h1>No Movies Available for Now</h1>
+        <p>Check back later for new releases or add a movie to our collection.</p>
+      </div>
+    <%}%>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About CineBook</h3>
+        <p>Your go-to platform for booking movie tickets online. We bring the cinema experience to your fingertips with the latest releases and exclusive deals.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <a href="/">Home</a>
+        <a href="/add-movie">Add Movie</a>
+        <a href="/booking">My Bookings</a>
+        <a href="#">Contact Us</a>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>Email: support@cinebook.com</p>
+        <p>Phone: 984733000</p>
+        <p>Address: 123 Cinema Street, Movie City</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 CineBook. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
